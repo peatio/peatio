@@ -7,7 +7,7 @@
   type: WithdrawChannelSatoshi
 - id: 400
   key: bank
-  currency: cny
+  currency: usd
   fixed: 2
   fee_max: 0
   min: 100
@@ -16,3 +16,17 @@
   proportion: true
   inuse: true
   type: WithdrawChannelBank
+- id: 600
+  key: ripple
+  currency: xrp
+  fixed: 3
+  fee: 0.0009
+  inuse: true
+  type: WithdrawChannelRipple
+- id: 800
+  key: bitcoin_cash
+  currency: bch
+  fixed: 8
+  fee: 0.0005
+  inuse: true
+  type: WithdrawChannelBitcoinCash

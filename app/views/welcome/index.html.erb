@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="logo">
+    <a href="https://peatio.tech" target="blank">
+      <img src="<%= ENV['LOGO_URL'] || image_path('logo.svg') %>">
+    </a>
+  </div>
+
+  <section class="text-center" style="line-height: 1">
+    <h2><%= t('slogan.heading') %></h2>
+    <% if flash[:notice] || flash[:info] || flash[:alert] %>
+      <div class="row">
+        <div class="col-xs-12 col-xs-offset-6">
+          <%= render 'shared/flash' %>
+        </div>
+      </div>
+    <% else %>
+      <h3><%= t('slogan.subheading') %></h3>
+      <p><%= t('slogan.text1') %></p>
+      <p><%= t('slogan.text2') %></p>
+    <% end %>
+  </section>
+
+  <div class="row" id="getstart">
+    <% unless current_user %>
+      <div class="col-xs-6 col-xs-offset-9 text-center">
+        <% if ENV['GOOGLE_OAUTH2_SIGN_IN'] %>
+          <a class="btn btn-primary btn-lg btn-block" href="/auth/google_oauth2" role="button"><%= t('header.sign_in_with_google') %></a>
+        <% end %>
+
+        <% if ENV['AUTH0_OAUTH2_SIGN_IN'] %>
+          <a class="btn btn-primary btn-lg btn-block" href="/auth/auth0" role="button"><%= t('header.sign_in_with_auth0') %></a>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="col-xs-6 col-xs-offset-9 text-center">
+        <a class="btn btn-primary btn-lg btn-block" href="<%= market_path(current_market) %>" role="button"><%= t('header.getstart') %></a>
+        <a class="btn btn-primary btn-lg btn-block" href="<%= settings_path %>" role="button"><%= t('header.settings') %></a>
+      </div>
+    <% end %>
+  </div>
+</div>

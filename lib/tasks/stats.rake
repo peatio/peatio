@@ -1,9 +1,9 @@
 namespace :stats do
 
   def asset_value(ts, currency, amount)
-    if currency.code != 'cny'
+    if currency.code != 'usd'
       redis = KlineDB.redis
-      market = Market.find "#{currency.code}cny"
+      market = Market.find "#{currency.code}usd"
       key = "peatio:#{market.id}:k:60"
       last_hour = 23.hours.since(Time.at ts)
 
@@ -34,11 +34,8 @@ namespace :stats do
       asset_stats[currency.code] = asset_value(ts, currency, stat[3])
     end
 
-    member_stats = Worker::MemberStats.new.get_point(ts, 1440)
-
     { trade_users:  trade_users,
-      asset_stats:  asset_stats,
-      member_stats: member_stats }
+      asset_stats:  asset_stats }
   end
 
   desc "send stats summary email"

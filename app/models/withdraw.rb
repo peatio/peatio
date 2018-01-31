@@ -78,7 +78,7 @@ class Withdraw < ActiveRecord::Base
     state :rejected,    after_commit: :send_email
     state :processing,  after_commit: [:send_coins!, :send_email]
     state :almost_done
-    state :done,        after_commit: [:send_email, :send_sms]
+    state :done,        after_commit: [:send_email]
     state :failed,      after_commit: :send_email
 
     event :submit do
@@ -146,6 +146,15 @@ class Withdraw < ActiveRecord::Base
 
       save!
     end
+
+    # FIXME: Unfortunately AASM doesn't fire after_commit
+    # callback (don't be confused with ActiveRecord's after_commit).
+    # This probably was broken after upgrade of Rails & gems.
+    # The fix is to manually invoke #send_coins! and #send_email.
+    # NOTE: These calls should be out of transaction so fast workers
+    # would not start processing data before it was committed to DB.
+    send_coins! if processing?
+    send_email
   end
 
   private
@@ -184,18 +193,6 @@ class Withdraw < ActiveRecord::Base
     else
       WithdrawMailer.withdraw_state(self.id).deliver
     end
-  end
-
-  def send_sms
-    return true if not member.sms_two_factor.activated?
-
-    sms_message = I18n.t('sms.withdraw_done', email: member.email,
-                                              currency: currency_text,
-                                              time: I18n.l(Time.now),
-                                              amount: amount,
-                                              balance: account.balance)
-
-    AMQPQueue.enqueue(:sms_notification, phone: member.phone_number, message: sms_message)
   end
 
   def send_coins!

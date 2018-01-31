@@ -9,19 +9,20 @@ module Admin
       can :read, Trade
       can :read, Proof
       can :update, Proof
-      can :manage, Document
       can :manage, Member
-      can :manage, Ticket
       can :manage, IdDocument
-      can :manage, TwoFactor
 
       can :menu, Deposit
       can :manage, ::Deposits::Bank
       can :manage, ::Deposits::Satoshi
+      can :manage, ::Deposits::Ripple
+      can :manage, ::Deposits::BitcoinCash
 
       can :menu, Withdraw
       can :manage, ::Withdraws::Bank
       can :manage, ::Withdraws::Satoshi
+      can :manage, ::Withdraws::Ripple
+      can :manage, ::Withdraws::BitcoinCash
     end
   end
 end

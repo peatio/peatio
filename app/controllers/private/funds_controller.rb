@@ -2,9 +2,7 @@ module Private
   class FundsController < BaseController
     layout 'funds'
 
-    before_action :auth_activated!
     before_action :auth_verified!
-    before_action :two_factor_activated!
 
     def index
       @deposit_channels = DepositChannel.all
@@ -24,7 +22,7 @@ module Private
         next if not account.currency_obj.coin?
 
         if account.payment_addresses.blank?
-          account.payment_addresses.create(currency: account.currency)
+          account.payment_addresses.create!(currency: account.currency)
         else
           address = account.payment_addresses.last
           address.gen_address if address.address.blank?

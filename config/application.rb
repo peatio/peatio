@@ -1,18 +1,20 @@
 require File.expand_path('../boot', __FILE__)
 
-# Pick the frameworks you want:
-require "active_record/railtie"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "sprockets/railtie"
-# require "rails/test_unit/railtie"
+require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
-Bundler.require(:default, Rails.env)
+Bundler.require(*Rails.groups)
 
 module Peatio
   class Application < Rails::Application
+
+    # Configure Sentry as early as possible.
+    if ENV['SENTRY_DSN_BACKEND'].present? && ENV['SENTRY_ENV'].to_s.split(',').include?(Rails.env)
+      require 'sentry-raven'
+      Raven.configure { |config| config.dsn = ENV['SENTRY_DSN_BACKEND'] }
+    end
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -21,29 +23,25 @@ module Peatio
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
 
+    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
+    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.enforce_available_locales = false
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', 'custom', '*.{yml}')]
-    config.i18n.available_locales = ['en', 'zh-CN', 'ko']
+    config.i18n.load_path += Dir[root.join('config', 'locales', '*.{yml}')]
+    config.i18n.available_locales = ['en']
 
-    config.autoload_paths += %W(#{config.root}/lib #{config.root}/lib/extras)
-
-    #config.assets.precompile += ['bootstrap-datetimepicker.css']
-    config.assets.initialize_on_precompile = true
-
-    # Precompile all available locales
-    Dir.glob("#{config.root}/app/assets/javascripts/locales/*.js.erb").each do |file|
-      config.assets.precompile << "locales/#{file.match(/([a-z\-A-Z]+\.js)\.erb$/)[1]}"
-    end
-
-    config.generators do |g|
-      g.orm             :active_record
-      g.template_engine :erb
-      g.stylesheets     false
-    end
+    config.autoload_paths += [root.join('lib'), root.join('lib/extras')]
 
     # Observer configuration
     config.active_record.observers = :transfer_observer
+
+    # Don't suppress exceptions in before_commit & after_commit callbacks.
+    config.active_record.raise_in_transactional_callbacks = true
+
+    config.assets.initialize_on_precompile = true
+
+    # Automatically load and reload constants from "lib/peatio".
+    config.paths.add 'lib/peatio', eager_load: true, glob: '*'
   end
 end

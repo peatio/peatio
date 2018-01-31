@@ -9,15 +9,11 @@ module Withdraws
     def create
       @withdraw = model_kls.new(withdraw_params)
 
-      if two_factor_auth_verified?
-        if @withdraw.save
-          @withdraw.submit!
-          render nothing: true
-        else
-          render text: @withdraw.errors.full_messages.join(', '), status: 403
-        end
+      if @withdraw.save
+        @withdraw.submit!
+        render nothing: true
       else
-        render text: I18n.t('private.withdraws.create.two_factors_error'), status: 403
+        render text: @withdraw.errors.full_messages.join(', '), status: 403
       end
     end
 
@@ -42,7 +38,7 @@ module Withdraws
     def withdraw_params
       params[:withdraw][:currency] = channel.currency
       params[:withdraw][:member_id] = current_user.id
-      params.require(:withdraw).permit(:fund_source_id, :member_id, :currency, :sum)
+      params.require(:withdraw).permit(:fund_source, :member_id, :currency, :sum)
     end
 
   end
