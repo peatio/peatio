@@ -3,11 +3,11 @@ defaults: &defaults
   # sites hosts
   # session expire seconds
   # admin role account
-  URL_HOST: peatio.dev:3000
+  URL_HOST: localhost:3000
   URL_SCHEMA: http
   SESSION_EXPIRE: 60
   ADMIN: 'admin@peatio.dev,admin@example.com'
-  TIMEZONE: 'Beijing'
+  TIMEZONE: 'Cairo'
 
   REDIS_URL: redis://127.0.0.1:6379
 
@@ -65,11 +65,6 @@ defaults: &defaults
 
   # Third party auth
 
-  # Weibo
-  # --------------------------------------------------------------
-  WEIBO_AUTH: on # on/off
-  WEIBO_KEY: 3820920586
-  WEIBO_SECRET: 2d6174dc698e86860c75d75b1e8a01c8
 
   # chat setting
   # --------------------------------------------------------------

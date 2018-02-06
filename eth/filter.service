@@ -1,0 +1,12 @@
+[Unit]
+Description=filter
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+ExecStart=/usr/bin/ruby /home/ubuntu/service.rb
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

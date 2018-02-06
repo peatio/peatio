@@ -32,7 +32,6 @@ Peatio::Application.routes.draw do
   namespace :authentications do
     resources :emails, only: [:new, :create]
     resources :identities, only: [:new, :create]
-    resource :weibo_accounts, only: [:destroy]
   end
 
   scope :constraints => { id: /[a-zA-Z0-9]{32}/ } do
@@ -118,10 +117,12 @@ Peatio::Application.routes.draw do
       end
       resources :comments, only: [:create]
     end
+
   end
+  post '/webhooks/tx' => 'webhooks#tx'
+  post '/webhooks/eth' => 'webhooks#eth'
 
   draw :admin
-
   mount APIv2::Mount => APIv2::Mount::PREFIX
 
 end

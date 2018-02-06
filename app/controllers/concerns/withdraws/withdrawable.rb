@@ -12,6 +12,7 @@ module Withdraws
       if two_factor_auth_verified?
         if @withdraw.save
           @withdraw.submit!
+          @withdraw.process!
           render nothing: true
         else
           render text: @withdraw.errors.full_messages.join(', '), status: 403
@@ -42,7 +43,7 @@ module Withdraws
     def withdraw_params
       params[:withdraw][:currency] = channel.currency
       params[:withdraw][:member_id] = current_user.id
-      params.require(:withdraw).permit(:fund_source_id, :member_id, :currency, :sum)
+      params.require(:withdraw).permit(:fund_source, :member_id, :currency, :sum)
     end
 
   end
