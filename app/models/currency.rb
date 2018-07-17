@@ -56,12 +56,14 @@ class Currency < ActiveYamlBase
 
   def blockchain_url(txid)
     raise unless coin?
-    blockchain.gsub('#{txid}', txid.to_s)
+    locale = I18n.locale.to_s.downcase
+    blockchain.gsub('#{txid}', txid.to_s).gsub('#{locale}', locale)
   end
 
   def address_url(address)
     raise unless coin?
-    self[:address_url].try :gsub, '#{address}', address
+    locale = I18n.locale.to_s.downcase
+    self[:address_url].try(:gsub, '#{address}', address).try(:gsub, '#{locale}', locale)
   end
 
   def quick_withdraw_max
