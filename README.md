@@ -19,7 +19,7 @@ Help is greatly appreciated, feel free to submit pull-requests or open issues.
 
 ### Things You Should Know ###
 
-RUNNING A EXCHANGE IS HARD.
+RUNNING AN EXCHANGE IS HARD.
 
 Peatio makes it easier, but running an exchange is still harder than a blog, which you can download the source code and following the guide or even a cool installer and boom!!! a fancy site is there to profit. We always prioritize security and speed higher than 1-click setup. We split Peatio to many components (processes) so it's flexible to deploy and scalable.
 
@@ -94,7 +94,7 @@ Here're some API clients and/or wrappers:
 
 * [peatio-client-ruby](https://github.com/peatio/peatio-client-ruby) is the official ruby client of both HTTP/Websocket API.
 * [peatio-client-python by JohnnyZhao](https://github.com/JohnnyZhao/peatio-client-python) is a python client written by JohnnyZhao.
-* [peatio-client-python by czheo](https://github.com/JohnnyZhao/peatio-client-python) is a python wrapper similar to peatio-client-ruby written by czheo.
+* [peatio-client-python by czheo](https://github.com/czheo/peatio-client-python) is a python wrapper similar to peatio-client-ruby written by czheo.
 * [peatioJavaClient](https://github.com/classic1999/peatioJavaClient.git) is a java client written by classic1999.
 * [yunbi-client-php](https://github.com/panlilu/yunbi-client-php) is a php client written by panlilu.
 
